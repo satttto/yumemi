@@ -5,6 +5,8 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
+use App\Models\Role;
+
 class RoleSeeder extends Seeder
 {
     /**
@@ -15,8 +17,8 @@ class RoleSeeder extends Seeder
     public function run()
     {
         DB::table('roles')->insert([
-            ['id' => 1, 'type' => 'admin'], 
-            ['id' => 2, 'type' => 'standard']
+            [ 'id' => Role::ADMIN, 'type' => '管理者' ], 
+            [ 'id' => Role::STANDARD, 'type' => '一般' ],
         ]);
     }
 }
