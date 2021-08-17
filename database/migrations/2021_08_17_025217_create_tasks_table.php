@@ -15,9 +15,9 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('level_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->foreignId('category_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->string('name');
+            $table->foreignId('level_id')->constrained();
+            $table->foreignId('category_id')->constrained();
+            $table->string('name', 128);
         });
     }
 

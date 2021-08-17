@@ -15,8 +15,8 @@ class CreateCategoriesTable extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('parent_category_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->string('name');
+            $table->foreignId('parent_category_id')->constrained();
+            $table->string('name', 128);
         });
     }
 

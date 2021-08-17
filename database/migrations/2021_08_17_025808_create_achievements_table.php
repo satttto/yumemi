@@ -14,8 +14,8 @@ class CreateAchievementsTable extends Migration
     public function up()
     {
         Schema::create('achievements', function (Blueprint $table) {
-            $table->foreignId('user_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
-            $table->foreignId('task_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('task_id')->constrained();
             $table->primary(['user_id','task_id']);
             $table->timestamps();
         });

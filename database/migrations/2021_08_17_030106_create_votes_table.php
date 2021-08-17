@@ -15,7 +15,7 @@ class CreateVotesTable extends Migration
     {
         Schema::create('votes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onUpdate('RESTRICT')->onDelete('RESTRICT');
+            $table->foreignId('user_id')->constrained();
             $table->integer('answer');
             $table->timestamps();
         });
