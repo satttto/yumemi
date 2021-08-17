@@ -15,9 +15,10 @@ class CreateTasksTable extends Migration
     {
         Schema::create('tasks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('level_id')->constrained();
+            $table->foreignId('level_id')->constrained()->nullable();
             $table->foreignId('category_id')->constrained();
             $table->string('name', 128);
+            $table->string('description', 10000);
         });
     }
 
