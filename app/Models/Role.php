@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\User;
+
 class Role extends Model
 {
     use HasFactory;
 
-    const ADMIN = 1;
-    const STANDARD = 2;
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -18,8 +19,11 @@ class Role extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
         'type',
     ];
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
 }

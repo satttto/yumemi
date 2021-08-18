@@ -5,13 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Task;
+
 class Level extends Model
 {
     use HasFactory;
 
-    const BEGINNER = 1;
-    const INTERMEDIATE = 2;
-    const ADVANCED = 3;
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -19,8 +19,12 @@ class Level extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
         'name',
     ];
+
+    public function tasks()
+    {
+        return $this->hasMany(Task::class);
+    }
 
 }

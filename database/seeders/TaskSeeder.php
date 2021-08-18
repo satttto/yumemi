@@ -6,7 +6,9 @@ use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 
 use App\Models\Level;
+use App\Models\ParentCategory;
 use App\Models\Category;
+use App\Models\Task;
 
 class TaskSeeder extends Seeder
 {
@@ -17,29 +19,54 @@ class TaskSeeder extends Seeder
      */
     public function run()
     { 
-        // TODO: IDのマジックナンバーを定数に置き換える。
-        DB::table('tasks')->insert([
-            [  'id' =>  1, 'level_id' => Level::BEGINNER, 'category_id' => Category::REMOTE_TOOL, 'description' => ''],
-            [  'id' =>  2, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::REMOTE_TOOL, 'description' => '' ],
-            [  'id' =>  3, 'level_id' => Level::BEGINNER, 'category_id' => Category::ENVIRONMENT, 'description' => '' ],
-            [  'id' =>  4, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::ENVIRONMENT, 'description' => '' ],
-            [  'id' =>  5, 'level_id' => Level::BEGINNER, 'category_id' => Category::SELF_DISCLOSURE, 'description' => '' ],
-            [  'id' =>  6, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::SELF_DISCLOSURE, 'description' => '' ],
-            [  'id' =>  7, 'level_id' => Level::ADVANCED, 'category_id' => Category::MENTAL_SECURITY, 'description' => '' ],
-            [  'id' =>  8, 'level_id' => Level::BEGINNER, 'category_id' => Category::THANKS, 'description' => '' ],
-            [  'id' =>  9, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::FEEDBACK, 'description' => '' ],
-            [  'id' =>  10, 'level_id' => Level::ADVANCED, 'category_id' => Category::FEEDBACK, 'description' => '' ],
-            [  'id' =>  11, 'level_id' => Level::ADVANCED, 'category_id' => Category::THANKS, 'description' => '' ],
-            [  'id' =>  12, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::LIFESTYLE, 'description' => '' ],
-            [  'id' =>  13, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::EAT_HABIT, 'description' => '' ],
-            [  'id' =>  14, 'level_id' => Level::INTERMEDIATE, 'category_id' => Category::EXERCISE, 'description' => '' ],
-            [  'id' =>  15, 'level_id' => Level::ADVANCED, 'category_id' => Category::SLEEP, 'description' => '' ],
-            [  'id' =>  16, 'level_id' => Level::ADVANCED, 'category_id' => Category::WORK_MANAGEMENT, 'description' => '' ],
-            [  'id' =>  17, 'level_id' => Level::ADVANCED, 'category_id' => Category::PERFORMANCE, 'description' => '' ],
-            [  'id' =>  18, 'level_id' => Level::ADVANCED, 'category_id' => Category::THINKING_HABIT, 'description' => '' ],
-            [  'id' =>  19, 'level_id' => Level::ADVANCED, 'category_id' => Category::MINDSET, 'description' => '' ],
-            [  'id' =>  20, 'level_id' => '', 'category_id' => Category::MEET_UP_100, 'description' => '' ],
-            [  'id' =>  21, 'level_id' => '', 'category_id' => Category::MEET_UP_100, 'description' => '' ],
+
+        // Insert parent category samples
+        $parentRemoteTool = ParentCategory::create(['name' => 'リモートツール利用']);
+        $parentEnvironment = ParentCategory::create(['name' => '環境デザイン']);
+
+        
+        // Insert category samples
+        $remoteTool = Category::create([
+            'name' => 'リモートツールワーク利用',
+            'parent_category_id' => $parentRemoteTool->id,
+        ]);
+        $environment = Category::create([
+            'name' => '環境デザイン',
+            'parent_category_id' => $parentEnvironment->id,
+        ]);
+
+
+        // Insert level samples
+        $beginner = Level::create(['name' => '初級']);
+        $intermediate = Level::create(['name' => '中級']);
+        $advanced = Level::create(['name' => '上級']);
+
+
+
+        // Insert task samples
+        Task::create([
+            'level_id' => $beginner->id,
+            'category_id' => $remoteTool->id,
+            'name' => '下記のSlackの基本的な使い方を実施している',
+            'description' => '',
+        ]);
+        Task::create([
+            'level_id' => $intermediate->id,
+            'category_id' => $remoteTool->id,
+            'name' => 'バーチャルオフィスツールoViceを３回以上利用したことがある',
+            'description' => '',
+        ]);
+        Task::create([
+            'level_id' => $beginner->id,
+            'category_id' => $environment->id,
+            'name' => '自宅での作業環境を、自宅の環境・制約がある中でも、自身なりに工夫して構築した。必ずしも最適な環境が整っている必要はない',
+            'description' => '',
+        ]);
+        Task::create([
+            'level_id' => $intermediate->id,
+            'category_id' => $environment->id,
+            'name' => 'SNSに依存しないように、見るタイミングを定めて概ねコントロールができている（１週間の中で４日以上）',
+            'description' => '',
         ]);
     }
 }

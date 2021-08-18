@@ -5,20 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Category;
+
 class ParentCategory extends Model
 {
     use HasFactory;
 
-    const REMOTE_TOOL = 1;
-    const ENVIRONMENT = 2;
-    const PERSONAL = 3;
-    const FEEDBACK = 4;
-    const LIFE_HABIT = 5;
-    const EXERCISE = 6;
-    const SLEEP = 7;
-    const WORK_HABIT = 8;
-    const THNKING_HABIT = 9;
-    const COMPANY_GOAL = 10;
+    public $timestamps = false;
 
     /**
      * The attributes that are mass assignable.
@@ -26,8 +19,12 @@ class ParentCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'id',
         'name',
     ];
+
+    public function categories()
+    {
+        return $this->hasMany(Category::class);
+    }
 
 }
