@@ -31,7 +31,7 @@ class CategorySeeder extends Seeder
             [ 'id' => Category::SLEEP, 'name' => '睡眠', 'parent_category_id' => ParentCategory::SLEEP ],
             [ 'id' => Category::WORK_HABIT, 'name' => '行動管理', 'parent_category_id' => ParentCategory::WORK_HABIT ],
             [ 'id' => Category::PERFORMANCE, 'name' => 'パフォーマンス向上', 'parent_category_id' => ParentCategory::WORK_HABIT ],
-            [ 'id' => Category::THNKING_HABIT, 'name' => '思考習慣', 'parent_category_id' => ParentCategory::THNKING_HABIT ],
+            [ 'id' => Category::THINKING_HABIT, 'name' => '思考習慣', 'parent_category_id' => ParentCategory::THNKING_HABIT ],
             [ 'id' => Category::MINDSET, 'name' => 'マインドセットや概念理解', 'parent_category_id' => ParentCategory::THNKING_HABIT ],
             [ 'id' => Category::MEET_UP_100, 'name' => '勉強会月間100件達成', 'parent_category_id' => ParentCategory::COMPANY_GOAL ],
         ]);

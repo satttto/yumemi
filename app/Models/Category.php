@@ -14,14 +14,14 @@ class Category extends Model
     const REMOTE_TOOL = 1;
     const ENVIRONMENT = 2;
     const SELF_DISCLOSURE = 3;
-    const MENTAL_SECURITY = 4;
+    const MENTAL_SAFETY = 4;
     const THANKS = 5;
     const FEEDBACK = 6;
     const LIFESTYLE = 7;
     const EAT_HABIT = 8;
     const EXERCISE = 9;
     const SLEEP = 10;
-    const WORK_MANAGEMENT = 11;
+    const WORK_HABIT = 11;
     const PERFORMANCE = 12;
     const THINKING_HABIT = 13;
     const MINDSET = 14;
