@@ -25,7 +25,7 @@ class LoginController extends Controller
             return response()->error('validation error', 422);
         }
         
-        // Find a user
+        // Find the user
         if (Auth::attempt($credentials)) {
             return response()->success(Auth::user());
         }
