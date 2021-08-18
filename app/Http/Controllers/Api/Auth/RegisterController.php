@@ -17,11 +17,15 @@ class RegisterController extends Controller
      */
     public function register(Request $request) 
     {
-        // Validation 
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        // Validating input
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->error('validation error', 422);
+        }
 
         // Create a record
         try {
@@ -31,13 +35,14 @@ class RegisterController extends Controller
                 'password' => bcrypt($request->password),
                 'role_id' => $request->role_id,
             ]);
-            return response()->json($user, 200);
+            return response()->success($user);
         } catch (QueryException $e) {
-            if ($e->getCode === 23000) {
-                return response()->json(['messsage' => 'duplicate user'], 422);
+            // Duplicate-user error
+            if ($e->getCode() === '23000') {
+                return response()->error('Duplicate Error', 409);
             } 
             // TODO: 考えられるエラーを列挙して、エラーコードごとに対処する
-            return response()->json(['messsage' => $e->getMessage()], 422);
+            return response()->error('error', 409);
         }
     }
 }

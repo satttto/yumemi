@@ -15,18 +15,23 @@ class LoginController extends Controller
     public function login(Request $request) 
     {
         
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        // Validating input
+        try {
+            $credentials = $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
+        } catch (ValidationException $e) {
+            return response()->error('validation error', 422);
+        }
         
         // Find a user
         if (Auth::attempt($credentials)) {
-            return response()->json(['message' => 'Welcome'], 200);
+            return response()->success(Auth::user());
         }
 
-        // When it doesn't match any user
-        return response()->json(['message' => 'Did not match any user'], 422);
+        // It doesn't match any user
+        return response()->error('Did not match any user', 401);
     }
 
     /**
@@ -35,6 +40,6 @@ class LoginController extends Controller
     public function logout()
     {
         Auth::logout();
-        return response()->json(['message' => 'Logged out'], 200);
+        return response()->success();
     }
 }
