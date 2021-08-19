@@ -6,11 +6,8 @@ use App\Models\Vote;
 
 class VoteStatusCheckerService
 {
-    public function isVotable()
+    public function isVotable($userId)
     {
-        // TODO: Auth::user()->id
-        $userId = 1;
-
         return !Vote::where('user_id', $userId)->exists();
     }
 }

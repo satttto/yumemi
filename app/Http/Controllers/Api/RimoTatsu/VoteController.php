@@ -55,7 +55,7 @@ class VoteController extends Controller
             ]);
             return response()->success('success');
         } catch (QueryException $e) {
-            return response()->error('failed to create', 409);
+            return response()->error('failed to create', Status::HTTP_CONFLICT);
         }
     }
 }
