@@ -25,6 +25,7 @@ class AchievementController extends Controller
                         ->orderBy('task_id')
                         ->get();
         
+        // TODO: service に書き換える。
         return response()->success('success', [
             'achievements' => $achievements,
             'is_editable' => $this->isEditable($userId),
@@ -48,7 +49,7 @@ class AchievementController extends Controller
         return response()->success();
     }
 
-    // TODO: votesに参加しているかどうかによって、true/falseを返す
+    // TODO: Serviceに書き換える
     private function isEditable($userId)
     {
         return false;
