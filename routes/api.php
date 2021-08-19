@@ -24,9 +24,12 @@ Route::post('/logout', 'Api\Auth\LoginController@logout');
 
 // TODO: ログイン中でないとアクセスできないようにする
 Route::prefix('rimo-tatsu')->group(function () {
-
     Route::get('task', 'Api\RimoTatsu\TaskController@index');
 
     Route::get('achievement', 'Api\RimoTatsu\AchievementController@index');
     Route::post('achievement', 'Api\RimoTatsu\AchievementController@update');
+
+    Route::get('vote-status', 'Api\RimoTatsu\VoteController@voteStatus');
+    Route::post('vote', 'Api\RimoTatsu\VoteController@vote');
 });
+

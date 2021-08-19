@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 use App\Models\Role;
+use App\Models\Vote;
 
 class User extends Authenticatable
 {
@@ -47,5 +48,10 @@ class User extends Authenticatable
     public function role()
     {
         return $this->belongsTo(Role::class, 'id', 'type');
+    }
+
+    public function vote()
+    {
+        return $this->hasOne(Vote::class);
     }
 }
