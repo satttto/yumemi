@@ -25,7 +25,7 @@ class VoteController extends Controller
     /**
      * Votablity checker
      */
-    public function VoteStatus(Request $request)
+    public function voteStatus(Request $request)
     {
         return response()->success('success', [
             'is_votable' => $this->checker->isVotable(),
