@@ -4,6 +4,11 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Response;
+/** 
+ * status code
+ * see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
+ */
+use \Symfony\Component\HttpFoundation\Response as Status;
 
 class ApiResponseServiceProvider extends ServiceProvider
 {
@@ -14,19 +19,20 @@ class ApiResponseServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // success
-        Response::macro('success', function ($data = [], $code = 200) {
+        // success, return 200
+        Response::macro('success', function ($message = '', $data = [], $code = Status::HTTP_OK) {
             return response()->json([
-                'status_code'  => $code,
+                'status'  => $code,
+                'message' => $message,
                 'data' => $data,
             ], $code);
         });
 
-        // error
-        Response::macro('error', function ($errMsg = '', $code = 400) {
+        // error, return 400
+        Response::macro('error', function ($message = '', $code = Status::HTTP_BAD_REQUEST) {
             return response()->json([
-                'status_code'  => $code,
-                'error_message'   => $errMsg,
+                'status'  => $code,
+                'message'   => $message,
             ], $code);
         });
     }

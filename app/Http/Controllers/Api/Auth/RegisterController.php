@@ -4,6 +4,11 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+/** 
+ * status code
+ * see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
+ */
+use \Symfony\Component\HttpFoundation\Response as Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
@@ -24,7 +29,8 @@ class RegisterController extends Controller
                 'password' => 'required',
             ]);
         } catch (ValidationException $e) {
-            return response()->error('validation error', 422);
+            // input validation error (422)
+            return response()->error('validation error', Status::HTTP_UNPROCESSABLE_ENTITY);
         }
 
         // Create a record
@@ -35,14 +41,14 @@ class RegisterController extends Controller
                 'password' => bcrypt($request->password),
                 'role_id' => $request->role_id,
             ]);
-            return response()->success();
+            return response()->success('registration succeeded');
         } catch (QueryException $e) {
-            // Duplicate-user error
+            // Duplicate-user error (409)
             if ($e->getCode() === '23000') {
-                return response()->error('Duplicate Error', 409);
+                return response()->error('Duplicate Error', Status::HTTP_CONFLICT);
             } 
-            // TODO: 考えられるエラーを列挙して、エラーコードごとに対処する
-            return response()->error('error', 409);
+            // TODO: 考えられるエラーを列挙して、エラーコードごとに対処する (409)
+            return response()->error('error', Status::HTTP_CONFLICT);
         }
     }
 }
