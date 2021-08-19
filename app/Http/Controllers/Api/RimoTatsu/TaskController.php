@@ -14,7 +14,10 @@ class TaskController extends Controller
      */
     public function index(Request $request) 
     {
-        $tasks = Task::with(['category.parentCategory', 'level'])->get();
+        $tasks = Task::with(['category.parentCategory', 'level'])
+                    ->orderBy('id')
+                    ->get();
+                    
         return response()->success('success', ["tasks" => $tasks]);
     }
 
