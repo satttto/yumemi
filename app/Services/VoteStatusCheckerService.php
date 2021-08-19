@@ -13,9 +13,4 @@ class VoteStatusCheckerService
 
         return !Vote::where('user_id', $userId)->exists();
     }
-
-    public function isEditable()
-    {
-        return $this->isVotable();
-    }
 }
