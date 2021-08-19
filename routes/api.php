@@ -21,3 +21,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', 'Api\Auth\RegisterController@register');
 Route::post('/login', 'Api\Auth\LoginController@login');
 Route::post('/logout', 'Api\Auth\LoginController@logout');
+
+// TODO: ログイン中でないとアクセスできないようにする
+Route::get('/rimo-tatsu/task', 'Api\RimoTatsu\TaskController@index');
+

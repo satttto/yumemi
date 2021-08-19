@@ -20,7 +20,8 @@ class ApiResponseServiceProvider extends ServiceProvider
     public function boot()
     {
         // success, return 200
-        Response::macro('success', function ($message = '', $data = [], $code = Status::HTTP_OK) {
+        // data format: 1.{"records": [{...}, {...}]} or 2. {"record": {...}}
+        Response::macro('success', function ($message = '', $data = '', $code = Status::HTTP_OK) {
             return response()->json([
                 'status'  => $code,
                 'message' => $message,
