@@ -21,3 +21,8 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', 'Api\Auth\RegisterController@register');
 Route::post('/login', 'Api\Auth\LoginController@login');
 Route::post('/logout', 'Api\Auth\LoginController@logout');
+
+Route::prefix('rimo-tatsu')->group(function () {
+    Route::get('achievement', 'Api\RimoTatsu\AchievementController@index');
+    Route::post('achievement', 'Api\RimoTatsu\AchievementController@update');
+});
