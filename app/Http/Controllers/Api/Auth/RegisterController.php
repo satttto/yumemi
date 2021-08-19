@@ -29,13 +29,13 @@ class RegisterController extends Controller
 
         // Create a record
         try {
-            $user = User::create([
+            User::create([
                 'name' => $request->name,
                 'email' => $request->email,
                 'password' => bcrypt($request->password),
                 'role_id' => $request->role_id,
             ]);
-            return response()->success($user);
+            return response()->success();
         } catch (QueryException $e) {
             // Duplicate-user error
             if ($e->getCode() === '23000') {
