@@ -25,3 +25,5 @@ Route::post('/logout', 'Api\Auth\LoginController@logout');
 // TODO: ログイン中でないとアクセスできないようにする
 Route::get('/rimo-tatsu/task', 'Api\RimoTatsu\TaskController@index');
 
+Route::get('/rimo-tatsu/vote-status', 'Api\RimoTatsu\VoteController@voteStatus');
+Route::post('/rimo-tatsu/vote', 'Api\RimoTatsu\VoteController@vote');
