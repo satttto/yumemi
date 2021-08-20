@@ -53,4 +53,14 @@ class VoteController extends Controller
         return $isSuccessful ? response()->success('success') :
                                response()->error('failed to create', Status::HTTP_CONFLICT);
     }
+
+    /**
+     * 宝くじの勝者を取得する
+     */
+    public function getWinner(Request $request)
+    {
+        [$winner, $answer] = $this->voteService->getWinner();
+        return $winner ? response()->success('success', ['user' =>  $winner, 'answer' => $answer]) :
+                               response()->error('failed to fetch');
+    }
 }

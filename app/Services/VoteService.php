@@ -1,6 +1,8 @@
 <?php
 
 namespace App\Services;
+
+use Illuminate\Support\Facades\DB;
 use App\Models\Achievement;
 use App\Models\Vote;
 
@@ -25,7 +27,6 @@ class VoteService
             return false;
         }
     }
-
 
     /**
      * ユーザーが宝くじ参加可能かチェック
@@ -53,5 +54,28 @@ class VoteService
     public function isEditable($userId)
     {
         return !Vote::where('user_id', $userId)->exists();
+    }
+
+    /**
+     * 宝くじに参加した人の中から勝者を決める
+     * 
+     * 優勝者の条件:ユニークな最小の値を答えた人(ただし正の値)
+     */
+    public function getWinner()
+    {
+        // ユニークな回答の最小値を見つける
+        $uniqueAnswer = Vote::select(DB::raw('answer, count(*) as num'))
+                        ->groupBy('answer')
+                        ->having('num', 1)
+                        ->orderBy('answer')
+                        ->first();
+        
+        if ($uniqueAnswer === null) {
+            return [null, null];
+        }
+
+        // ユニークで最小の回答をしたユーザーを取得
+        $winner = Vote::where('answer', $uniqueAnswer->answer)->first()->user;
+        return [$winner->name, $uniqueAnswer->answer];
     }
 }
