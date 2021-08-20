@@ -3,20 +3,25 @@
 namespace App\Http\Controllers\Api\RimoTatsu;
 
 use App\Http\Controllers\Controller;
-use App\Models\Task;
+use App\Services\TaskService;
 use Illuminate\Http\Request;
 
 
 class TaskController extends Controller
 {
+    private $taskService;
+
+    public function __construct(TaskService $taskService)
+    {
+        $this->taskService = $taskService;
+    }
     /**
-     * Tasks list
+     * タスク一覧の取得
      */
     public function index(Request $request) 
     {
-        $tasks = Task::with(['category.parentCategory', 'level'])
-                    ->orderBy('id')
-                    ->get();
+        // 全てのタスクを取得
+        $tasks = $this->taskService->getAll();
                     
         return response()->success('success', ["tasks" => $tasks]);
     }

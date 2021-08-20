@@ -7,7 +7,22 @@ use App\Models\Task;
 class TaskService
 {
     /**
-     * Check if all the task ids are in tasks table
+     * 全てのタスクを取得
+     * 
+     * @return collection
+     */
+    public function getAll()
+    {
+        return Task::with(['category.parentCategory', 'level'])
+                    ->orderBy('id')
+                    ->get();
+    }
+
+    /**
+     * タスクIDが有効かどうかチェック
+     * 
+     * @param integer[] $taskIds - あるかどうかを確認するタスクID
+     * @return boolean - true if all ids exist
      */
     public function existAll($taskIds = [])
     {

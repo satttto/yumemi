@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Services\UserService;
+use App\Services\RoleService;
 use Illuminate\Http\Request;
 /** 
  * status code
@@ -11,44 +13,52 @@ use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response as Status;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Database\QueryException;
-
-use App\Models\User;
 
 class RegisterController extends Controller
 {
+    private $userService;
+    private $roleService;
+
+    public function __construct(UserService $userService, RoleService $roleService)
+    {
+        $this->userService = $userService;
+        $this->roleService = $roleService;
+    }
+
     /**
-     * Register a user
+     * ユーザーの新規登録
      */
     public function register(Request $request) 
     {
         // Validating input
+        // TODO: 別な場所に切り出す
         try {
             $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
         } catch (ValidationException $e) {
-            // input validation error (422)
             return response()->error('validation error', Status::HTTP_UNPROCESSABLE_ENTITY);
         }
 
-        // Create a record
-        try {
-            User::create([
-                'name' => $request->name,
-                'email' => $request->email,
-                'password' => bcrypt($request->password),
-                'role_id' => $request->role_id,
-            ]);
-            return response()->success('registration succeeded');
-        } catch (QueryException $e) {
-            // Duplicate-user error (409)
-            if ($e->getCode() === '23000') {
-                return response()->error('Duplicate Error', Status::HTTP_CONFLICT);
-            } 
-            // TODO: 考えられるエラーを列挙して、エラーコードごとに対処する (409)
-            return response()->error('error', Status::HTTP_CONFLICT);
+        // Emailがユニークかどうかチェック
+        if (!$this->userService->isUniqueEmail($request->email)) {
+            return response()->error('emai not unique', Status::HTTP_CONFLICT);
         }
+
+        // 有効なroleかどうかをチェック
+        if (!$this->roleService->isIdValid($request->role_id)) {
+            return response()->error('invalid role id', Status::HTTP_BAD_REQUEST);
+        }
+
+        // ユーザー新規作成
+        $isSuccessful = $this->userService->register(
+            $request->name,
+            $request->email,
+            $request->password,
+            $request->role_id
+        );
+        return $isSuccessful ? response()->success('registration succeeded') :
+                               response()->error('error', Status::HTTP_CONFLICT);
     }
 }

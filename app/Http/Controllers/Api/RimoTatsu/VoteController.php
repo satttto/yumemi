@@ -4,60 +4,53 @@ namespace App\Http\Controllers\Api\RimoTatsu;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
-use App\Services\VoteStatusCheckerService;
+use App\Services\VoteService;
 use Illuminate\Http\Request;
 /** 
  * status code
  * see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
  */
 use \Symfony\Component\HttpFoundation\Response as Status;
-use App\Models\Vote;
+
 
 class VoteController extends Controller
 {
-    private $checker;
+    private $voteService;
 
-    public function __construct(VoteStatusCheckerService $checker)
+    public function __construct(VoteService $voteService)
     {
-        $this->checker = $checker;
+        $this->voteService = $voteService;
     }
 
     /**
-     * Votablity checker
+     * ユーザーが宝くじに参加できるかどうかを確認
      */
     public function voteStatus(Request $request)
     {
         //TODO: Auth::user()->id
         $userId = 3;
         return response()->success('success', [
-            'is_votable' => $this->checker->isVotable($userId),
+            'is_votable' => $this->voteService->isVotable($userId),
         ]);
     }
 
 
     /**
-     * Vote
+     * 宝くじに参加する
      */
     public function vote(Request $request)
     {
         //TODO: Auth::user()->id
         $userId = 1;
 
-        // Check if the user already takes part in, return error(400)
-        if (!$this->checker->isVotable($userId))
-        {
+        // ユーザーが投票可能かどうかの判定
+        if (!$this->checker->isVotable($userId)) {
             return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
         }
 
-        // Insert data
-        try {
-            Vote::create([
-                'user_id' => $userId,
-                'answer' => $request->answer,
-            ]);
-            return response()->success('success');
-        } catch (QueryException $e) {
-            return response()->error('failed to create', Status::HTTP_CONFLICT);
-        }
+        // 投票
+        $isSuccessful = $this->voteService->vote($userId, $request->answer);
+        return $isSuccessful ? response()->success('success') :
+                               response()->error('failed to create', Status::HTTP_CONFLICT);
     }
 }
