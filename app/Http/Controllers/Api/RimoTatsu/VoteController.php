@@ -27,8 +27,10 @@ class VoteController extends Controller
      */
     public function voteStatus(Request $request)
     {
+        //TODO: Auth::user()->id
+        $userId = 3;
         return response()->success('success', [
-            'is_votable' => $this->checker->isVotable(),
+            'is_votable' => $this->checker->isVotable($userId),
         ]);
     }
 
@@ -42,7 +44,7 @@ class VoteController extends Controller
         $userId = 1;
 
         // Check if the user already takes part in, return error(400)
-        if (!$this->checker->isVotable())
+        if (!$this->checker->isVotable($userId))
         {
             return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
         }
