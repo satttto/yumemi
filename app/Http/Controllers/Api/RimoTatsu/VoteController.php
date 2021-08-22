@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\RimoTatsu;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
 use App\Services\VoteService;
 use Illuminate\Http\Request;
@@ -43,6 +44,15 @@ class VoteController extends Controller
     {
         //TODO: Auth::user()->id
         $userId = 1;
+
+        // TODO: answerのバリデーション
+        try {
+            $request->validate([
+                'answer' => 'required|integer|min:1'
+            ]);
+        } catch (ValidationException $e) {
+            return response()->error('validation error', Status::HTTP_UNPROCESSABLE_ENTITY);
+        }
 
         // ユーザーが投票可能かどうかの判定
         try {

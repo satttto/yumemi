@@ -51,14 +51,19 @@ class AchievementController extends Controller
         // TODO: 実際にはAuth::user()->idとしてidを取得
         $userId = 4; 
 
-        // TODO: 以下二つをバリデーションにする
-        // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
-        if (!$this->voteService->isEditable($userId)) {
-            return response()->error('Not Editable', Status::HTTP_BAD_REQUEST);
-        }
+        // TODO: バリデーションにする
         // 受け取った全てのタスクidが本当に存在するのかの確認
         if (!$this->taskService->existAll($request->task_ids)) {
             return response()->error('Invalid task ids', Status::HTTP_BAD_REQUEST);
+        }
+
+        // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
+        try {
+            if (!$this->voteService->isEditable($userId)) {
+                return response()->error('Not Editable', Status::HTTP_BAD_REQUEST);
+            }
+        } catch(QueryException $e) {
+            return response()->error('DB error');
         }
 
         // ユーザーのタスクの更新

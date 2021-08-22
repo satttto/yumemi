@@ -32,6 +32,7 @@ class RegisterController extends Controller
         // TODO: 別な場所に切り出す
         try {
             $request->validate([
+                'name' => 'required',
                 'email' => 'required|email|unique:users,email',
                 'password' => 'required',
             ]);
