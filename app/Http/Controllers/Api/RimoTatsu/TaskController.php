@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\RimoTatsu;
 use App\Http\Controllers\Controller;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
+use Illuminate\Database\QueryException;
 
 
 class TaskController extends Controller
@@ -21,9 +22,13 @@ class TaskController extends Controller
     public function index(Request $request) 
     {
         // 全てのタスクを取得
-        $tasks = $this->taskService->getAll();
-                    
-        return response()->success('success', ["tasks" => $tasks]);
+        try {
+            return response()->success('succeeded to retrieve tasks', [
+                "tasks" => $this->taskService->getAll(),
+            ]);
+        } catch(QueryException $e) {
+            return response()->error('failed to retrieve tasks', Status::HTTP_BAD_REQUEST);
+        }
     }
 
 }

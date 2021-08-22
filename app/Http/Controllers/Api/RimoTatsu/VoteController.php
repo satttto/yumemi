@@ -6,11 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Database\QueryException;
 use App\Services\VoteService;
 use Illuminate\Http\Request;
-/** 
- * status code
- * see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
- */
-use \Symfony\Component\HttpFoundation\Response as Status;
+use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
+
 
 
 class VoteController extends Controller
@@ -28,10 +25,14 @@ class VoteController extends Controller
     public function voteStatus(Request $request)
     {
         //TODO: Auth::user()->id
-        $userId = 3;
-        return response()->success('success', [
-            'is_votable' => $this->voteService->isVotable($userId),
-        ]);
+        $userId = 4;
+        try {
+            return response()->success('succeeded to check if votable', [
+                'is_votable' => $this->voteService->isVotable($userId),
+            ]);
+        } catch(QueryException $e) {
+            return response()->error('failed to check if votable', Status::HTTP_BAD_REQUEST);
+        }
     }
 
 
@@ -44,13 +45,20 @@ class VoteController extends Controller
         $userId = 1;
 
         // ユーザーが投票可能かどうかの判定
-        if (!$this->checker->isVotable($userId)) {
-            return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
+        try {
+            if (!$this->voteService->isVotable($userId)) {
+                return response()->success('Not votable');
+            }
+        } catch (QueryException $e) {
+            return response()->error('Bad query', Status::HTTP_BAD_REQUEST);
         }
 
         // 投票
-        $isSuccessful = $this->voteService->vote($userId, $request->answer);
-        return $isSuccessful ? response()->success('success') :
-                               response()->error('failed to create', Status::HTTP_CONFLICT);
+        try {
+            $this->voteService->vote($userId, $request->answer);
+            return response()->success('succeeded to vote');
+        } catch(QueryExceptkon $e) {
+            return response()->error('failed to create', Status::HTTP_CONFLICT);
+        }
     }
 }
