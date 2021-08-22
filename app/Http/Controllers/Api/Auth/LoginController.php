@@ -15,33 +15,32 @@ use Illuminate\Validation\ValidationException;
 class LoginController extends Controller
 {
     /**
-     * Login
+     * ログイン
      */
     public function login(Request $request) 
     {
         
         // Validating input
+        // TODO: 別な場所に切り出す
         try {
             $credentials = $request->validate([
                 'email' => 'required|email',
                 'password' => 'required',
             ]);
         } catch (ValidationException $e) {
-            // return 422
             return response()->error('validation error', Status::HTTP_UNPROCESSABLE_ENTITY);
         }
         
-        // Find the user
+        // ユーザーのログイン
         if (Auth::attempt($credentials)) {
             return response()->success('login succeeded');
         }
 
-        // It doesn't match any user, return 400
         return response()->error('Did not match any user');
     }
 
     /**
-     * Logout
+     * ログアウト
      */
     public function logout()
     {
