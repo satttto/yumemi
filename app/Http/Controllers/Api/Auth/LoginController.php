@@ -33,6 +33,7 @@ class LoginController extends Controller
         
         // ユーザーのログイン
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
             return response()->success('login succeeded');
         }
 
