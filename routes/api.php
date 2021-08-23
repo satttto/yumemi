@@ -19,7 +19,7 @@ Route::post('/register', 'Api\Auth\RegisterController@register');
 Route::post('/login', 'Api\Auth\LoginController@login');
 Route::post('/logout', 'Api\Auth\LoginController@logout');
 
-Route::middleware('auth:sanctum')->group(function() {
+Route::middleware('auth:api')->group(function() {
     Route::get('/user', function(Request $request) {
         return $request->user();
     });
