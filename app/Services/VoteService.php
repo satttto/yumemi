@@ -17,15 +17,10 @@ class VoteService
      */
     public function vote($userId, $answer) 
     {
-        try {
-            Vote::create([
-                'user_id' => $userId,
-                'answer' => $request->answer,
-            ]);
-            return true;
-        } catch (QueryException $e) {
-            return false;
-        }
+        Vote::create([
+            'user_id' => $userId,
+            'answer' => $answer,
+        ]);
     }
 
     /**

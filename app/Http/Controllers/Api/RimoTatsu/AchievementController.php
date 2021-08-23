@@ -6,12 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Services\AchievementService;
 use App\Services\VoteService;
 use App\Services\TaskService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
-/** 
- * status code
- * see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
- */
-use \Symfony\Component\HttpFoundation\Response as Status;
+use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
+use Illuminate\Database\QueryException;
 
 class AchievementController extends Controller
 {
@@ -19,7 +17,7 @@ class AchievementController extends Controller
     private $voteService;
     private $taskService;
 
-    public function __construct(AchievementService $achievementService, VoteStatusCheckerService $voteService, TaskService $taskService)
+    public function __construct(AchievementService $achievementService, VoteService $voteService, TaskService $taskService)
     {
         $this->achievementService = $achievementService;
         $this->voteService = $voteService;
@@ -32,15 +30,17 @@ class AchievementController extends Controller
     public function index(Request $request)
     {
         // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 1; 
+        $userId = 3; 
 
         // ユーザーの達成項目取得
-        $achievements = $this->achievementService->getAchievementsOf($userId);
-        
-        return response()->success('success', [
-            'achievements' => $achievements,
-            'is_editable' => $this->voteService->isEditable($userId),
-        ]);
+        try {
+            return response()->success('succeeded to retrieve achievements', [
+                'achievements' => $this->achievementService->getAchievementsOf($userId),
+                'is_editable' => $this->voteService->isEditable($userId),
+            ]);
+        } catch(QueryException $e) {
+            return response()->error('failed to retrieve achievements', Status::HTTP_BAD_REQUEST);
+        }
     }
 
     /**
@@ -49,22 +49,32 @@ class AchievementController extends Controller
     public function update(Request $request)
     {
         // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 1; 
+        $userId = 4; 
 
-        // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
-        if (!$this->voteService->isEditable($userId)) {
-            return response()->error('Not Editable', Status::HTTP_BAD_REQUEST);
-        }
-
+        // TODO: バリデーションにする
         // 受け取った全てのタスクidが本当に存在するのかの確認
         if (!$this->taskService->existAll($request->task_ids)) {
             return response()->error('Invalid task ids', Status::HTTP_BAD_REQUEST);
         }
 
-        // ユーザーのタスクの更新
-        $isSuccessful = $this->achievementService->renew($userId, $request->task_ids);
-        return $isSuccessful ? response()->success('success') : 
-                               response()->error('DB error', Status::HTTP_CONFLICT);
+        // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
+        try {
+            if (!$this->voteService->isEditable($userId)) {
+                return response()->error('Not Editable', Status::HTTP_BAD_REQUEST);
+            }
+        } catch(QueryException $e) {
+            return response()->error('DB error');
+        }
 
+        // ユーザーのタスクの更新
+        try {
+            DB::beginTransaction();
+            $this->achievementService->renew($userId, $request->task_ids);
+            DB::commit();
+            return response()->success('updated achievements');
+        } catch(QueryException $e) {
+            DB::rollback();
+            return response()->error('failed to update', Status::HTTP_BAD_REQUEST);
+        }
     }
 }
