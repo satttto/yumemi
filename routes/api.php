@@ -31,5 +31,6 @@ Route::prefix('rimo-tatsu')->group(function () {
 
     Route::get('vote-status', 'Api\RimoTatsu\VoteController@voteStatus');
     Route::post('vote', 'Api\RimoTatsu\VoteController@vote');
+    Route::get('winner', 'Api\RimoTatsu\VoteController@getWinner');
 });
 
