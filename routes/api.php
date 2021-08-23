@@ -2,7 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\Api\RimoTatsu\TaskController;
+use App\Http\Controllers\Api;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +15,9 @@ use App\Http\Controllers\Api\RimoTatsu\TaskController;
 |
 */
 
-Route::post('/register', 'Api\Auth\RegisterController@register');
-Route::post('/login', 'Api\Auth\LoginController@login');
-Route::post('/logout', 'Api\Auth\LoginController@logout');
+Route::post('/register', [Api\Auth\RegisterController::class, 'register']);
+Route::post('/login', [Api\Auth\LoginController::class, 'login']);
+Route::post('/logout', [Api\Auth\LoginController::class, 'logout']);
 
 Route::middleware('auth:api')->group(function() {
     Route::get('/user', function(Request $request) {
@@ -25,14 +25,14 @@ Route::middleware('auth:api')->group(function() {
     });
     
     Route::prefix('rimo-tatsu')->group(function () {
-        Route::get('task', [TaskController::class, 'index']);
+        Route::get('task', [Api\RimoTatsu\TaskController::class, 'index']);
     
-        Route::get('achievement', 'Api\RimoTatsu\AchievementController@index');
-        Route::post('achievement', 'Api\RimoTatsu\AchievementController@update');
+        Route::get('achievement', [Api\RimoTatsu\AchievementController::class, 'index']);
+        Route::post('achievement', [Api\RimoTatsu\AchievementController::class, 'update']);
     
-        Route::get('vote-status', 'Api\RimoTatsu\VoteController@voteStatus');
-        Route::post('vote', 'Api\RimoTatsu\VoteController@vote');
-        Route::get('winner', 'Api\RimoTatsu\VoteController@getWinner');
+        Route::get('vote-status', [Api\RimoTatsu\VoteController::class, 'voteStatus']);
+        Route::post('vote', [Api\RimoTatsu\VoteController::class, 'vote']);
+        Route::get('winner', [Api\RimoTatsu\VoteController::class, 'getWinner']);
     });
 });
 
