@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class AchievementController extends Controller
 {
@@ -29,8 +30,7 @@ class AchievementController extends Controller
      */
     public function index(Request $request)
     {
-        // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 3; 
+        $userId = Auth::id(); 
 
         // ユーザーの達成項目取得
         try {
@@ -48,8 +48,7 @@ class AchievementController extends Controller
      */
     public function update(Request $request)
     {
-        // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 4; 
+        $userId = Auth::id(); 
 
         // TODO: バリデーションにする
         // 受け取った全てのタスクidが本当に存在するのかの確認
