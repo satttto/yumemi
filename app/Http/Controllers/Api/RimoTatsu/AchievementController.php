@@ -3,12 +3,12 @@
 namespace App\Http\Controllers\Api\RimoTatsu;
 
 use App\Http\Controllers\Controller;
-use App\Services\AchievementService;
-use App\Services\VoteService;
-use App\Services\TaskService;
-use Illuminate\Support\Facades\DB;
+use App\Http\Requests\AchievementRequest;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
+use App\Services\AchievementService;
+use App\Services\VoteService;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Auth;
 
@@ -16,13 +16,12 @@ class AchievementController extends Controller
 {
     private $achievementService;
     private $voteService;
-    private $taskService;
 
-    public function __construct(AchievementService $achievementService, VoteService $voteService, TaskService $taskService)
+
+    public function __construct(AchievementService $achievementService, VoteService $voteService)
     {
         $this->achievementService = $achievementService;
         $this->voteService = $voteService;
-        $this->taskService = $taskService;
     }
 
     /**
@@ -46,15 +45,9 @@ class AchievementController extends Controller
     /**
      * ユーザーの達成タスクリストの変更
      */
-    public function update(Request $request)
+    public function update(AchievementRequest $request)
     {
         $userId = Auth::id(); 
-
-        // TODO: バリデーションにする
-        // 受け取った全てのタスクidが本当に存在するのかの確認
-        if (!$this->taskService->existAll($request->task_ids)) {
-            return response()->error('Invalid task ids', Status::HTTP_BAD_REQUEST);
-        }
 
         // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
         try {
