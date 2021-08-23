@@ -47,7 +47,7 @@ class AchievementRequest extends FormRequest
                             return $fail('Invalid task ids were included.');
                         }
                     } catch(QueryException $e) {
-                        $res = response()->error($validator->errors(), Status::HTTP_BAD_REQUEST);
+                        $res = response()->error('Bad Request', Status::HTTP_BAD_REQUEST);
                         throw new HttpResponseException($res);
                     }
                 }
