@@ -8,6 +8,8 @@ use \Symfony\Component\HttpFoundation\Response as Status; // see Details https:/
 use App\Services\UserService;
 use App\Models\Role;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+
 
 class RegisterController extends Controller
 {
@@ -25,15 +27,17 @@ class RegisterController extends Controller
     {
         // 一般ユーザー新規作成
         try {
-            $this->userService->register(
+            $user = $this->userService->register(
                 $request->name,
                 $request->email,
                 $request->password,
                 Role::where('type', '一般')->first()->id,
             );
-            return response()->success('Registration succeeded');
         } catch (QueryException $e) {
             return response()->error('Registration failed', Status::HTTP_BAD_REQUEST);
         }
+        Auth::login($user);
+        $request->session()->regenerate();
+        return response()->success('Registration succeeded');
     }
 }
