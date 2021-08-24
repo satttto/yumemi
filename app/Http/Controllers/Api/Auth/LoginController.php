@@ -23,7 +23,7 @@ class LoginController extends Controller
             return response()->success('login succeeded');
         }
 
-        return response()->error('Email and/or Password is wrong');
+        return response()->error('Email and/or Password is wrong', Status::HTTP_BAD_REQUEST);
     }
 
     /**
