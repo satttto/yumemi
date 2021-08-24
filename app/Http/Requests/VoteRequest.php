@@ -16,7 +16,6 @@ class VoteRequest extends FormRequest
      */
     public function authorize()
     {
-        // TODO: Make it false when authentication is set
         return true;
     }
 

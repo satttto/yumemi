@@ -4,7 +4,6 @@ namespace App\Http\Controllers\Api\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
-use \Symfony\Component\HttpFoundation\Response as Status; // see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
 use Illuminate\Support\Facades\Auth;
 
 
@@ -20,6 +19,7 @@ class LoginController extends Controller
 
         // ユーザーのログイン
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
             return response()->success('login succeeded');
         }
 

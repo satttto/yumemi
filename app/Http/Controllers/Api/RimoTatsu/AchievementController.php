@@ -10,6 +10,7 @@ use App\Services\AchievementService;
 use App\Services\VoteService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
 
 class AchievementController extends Controller
 {
@@ -28,8 +29,7 @@ class AchievementController extends Controller
      */
     public function index(Request $request)
     {
-        // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 3; 
+        $userId = Auth::id(); 
 
         // ユーザーの達成項目取得
         try {
@@ -47,8 +47,7 @@ class AchievementController extends Controller
      */
     public function update(AchievementRequest $request)
     {
-        // TODO: 実際にはAuth::user()->idとしてidを取得
-        $userId = 4; 
+        $userId = Auth::id(); 
 
         // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
         try {

@@ -19,7 +19,7 @@ class Level extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'text_jp',
     ];
 
     public function tasks()

@@ -5,10 +5,11 @@ namespace App\Http\Controllers\Api\Auth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegisterRequest;
 use \Symfony\Component\HttpFoundation\Response as Status; // see Details https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
-use Illuminate\Support\Facades\Auth;
 use App\Services\UserService;
 use App\Models\Role;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Auth;
+
 
 class RegisterController extends Controller
 {
@@ -26,15 +27,17 @@ class RegisterController extends Controller
     {
         // 一般ユーザー新規作成
         try {
-            $this->userService->register(
+            $user = $this->userService->register(
                 $request->name,
                 $request->email,
                 $request->password,
                 Role::where('type', '一般')->first()->id,
             );
-            return response()->success('Registration succeeded');
         } catch (QueryException $e) {
             return response()->error('Registration failed', Status::HTTP_BAD_REQUEST);
         }
+        Auth::login($user);
+        $request->session()->regenerate();
+        return response()->success('Registration succeeded');
     }
 }
