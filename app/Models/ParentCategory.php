@@ -19,7 +19,7 @@ class ParentCategory extends Model
      * @var array
      */
     protected $fillable = [
-        'name',
+        'text_jp',
     ];
 
     public function categories()
