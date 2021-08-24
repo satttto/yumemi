@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\RimoTatsu;
 use App\Http\Controllers\Controller;
 use App\Services\TaskService;
 use Illuminate\Http\Request;
+use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
 use Illuminate\Database\QueryException;
 
 
@@ -23,11 +24,11 @@ class TaskController extends Controller
     {
         // 全てのタスクを取得
         try {
-            return response()->success('succeeded to retrieve tasks', [
+            return response()->success('success', [
                 "tasks" => $this->taskService->getAll(),
             ]);
         } catch(QueryException $e) {
-            return response()->error('failed to retrieve tasks', Status::HTTP_BAD_REQUEST);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 

@@ -33,12 +33,12 @@ class AchievementController extends Controller
 
         // ユーザーの達成項目取得
         try {
-            return response()->success('succeeded to retrieve achievements', [
+            return response()->success('success', [
                 'achievements' => $this->achievementService->getAchievementsOf($userId),
                 'is_editable' => $this->voteService->isEditable($userId),
             ]);
         } catch(QueryException $e) {
-            return response()->error('failed to retrieve achievements', Status::HTTP_BAD_REQUEST);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -53,10 +53,10 @@ class AchievementController extends Controller
         // 既に宝くじに参加しているかどうかの確認(Yesなら変更不可)
         try {
             if (!$this->voteService->isEditable($userId)) {
-                return response()->error('Not Editable', Status::HTTP_BAD_REQUEST);
+                return response()->error('Not editable', Status::HTTP_BAD_REQUEST);
             }
         } catch(QueryException $e) {
-            return response()->error('DB error');
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // ユーザーのタスクの更新
@@ -64,10 +64,10 @@ class AchievementController extends Controller
             DB::beginTransaction();
             $this->achievementService->renew($userId, $request->task_ids);
             DB::commit();
-            return response()->success('updated achievements');
+            return response()->success('success');
         } catch(QueryException $e) {
             DB::rollback();
-            return response()->error('failed to update', Status::HTTP_BAD_REQUEST);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

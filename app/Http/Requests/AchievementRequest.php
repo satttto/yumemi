@@ -44,10 +44,10 @@ class AchievementRequest extends FormRequest
                     // リクエストで送られたタスクIDが本当に存在するかどうかを確認する
                     try {
                         if (!$that->taskService->existAll($value)) {
-                            return $fail('Invalid task ids were included.');
+                            return $fail('Task ids invalid');
                         }
                     } catch(QueryException $e) {
-                        $res = response()->error($validator->errors(), Status::HTTP_BAD_REQUEST);
+                        $res = response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
                         throw new HttpResponseException($res);
                     }
                 }
