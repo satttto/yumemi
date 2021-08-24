@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\VoteRequest;
 use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
-use Illuminate\Validation\ValidationException;
 use Illuminate\Database\QueryException;
 use App\Services\VoteService;
-
+use Illuminate\Support\Facades\Auth;
 
 
 class VoteController extends Controller
@@ -26,8 +25,8 @@ class VoteController extends Controller
      */
     public function voteStatus(Request $request)
     {
-        //TODO: Auth::user()->id
-        $userId = 4;
+        $userId = Auth::id();
+     
         try {
             return response()->success('succeeded to check if votable', [
                 'is_votable' => $this->voteService->isVotable($userId),
@@ -43,8 +42,7 @@ class VoteController extends Controller
      */
     public function vote(VoteRequest $request)
     {
-        //TODO: Auth::user()->id
-        $userId = 1;
+        $userId = Auth::id();
 
         // ユーザーが投票可能かどうかの判定
         try {
@@ -59,7 +57,7 @@ class VoteController extends Controller
         try {
             $this->voteService->vote($userId, $request->answer);
             return response()->success('succeeded to vote');
-        } catch(QueryExceptkon $e) {
+        } catch(QueryException $e) {
             return response()->error('failed to create', Status::HTTP_CONFLICT);
         }
     }

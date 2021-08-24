@@ -16,7 +16,7 @@ class UserService
      */
     public function register($name, $email, $password, $roleId)
     {
-        User::create([
+        return User::create([
             'name' => $name,
             'email' => $email,
             'password' => bcrypt($password),
