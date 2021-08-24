@@ -27,6 +27,7 @@ class TaskController extends Controller
                 "tasks" => $this->taskService->getAll(),
             ]);
         } catch(QueryException $e) {
+            \Log::debug($e->getMessage());
             return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
