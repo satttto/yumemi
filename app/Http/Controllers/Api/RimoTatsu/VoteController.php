@@ -29,11 +29,11 @@ class VoteController extends Controller
         //TODO: Auth::user()->id
         $userId = 4;
         try {
-            return response()->success('succeeded to check if votable', [
+            return response()->success('success', [
                 'is_votable' => $this->voteService->isVotable($userId),
             ]);
         } catch(QueryException $e) {
-            return response()->error('failed to check if votable', Status::HTTP_BAD_REQUEST);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -49,18 +49,18 @@ class VoteController extends Controller
         // ユーザーが投票可能かどうかの判定
         try {
             if (!$this->voteService->isVotable($userId)) {
-                return response()->error('Not Votable', Status::HTTP_BAD_REQUEST);
+                return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
             }
         } catch (QueryException $e) {
-            return response()->error('Bad query', Status::HTTP_BAD_REQUEST);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // 投票
         try {
             $this->voteService->vote($userId, $request->answer);
-            return response()->success('succeeded to vote');
+            return response()->success('success');
         } catch(QueryExceptkon $e) {
-            return response()->error('failed to create', Status::HTTP_CONFLICT);
+            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
