@@ -248,8 +248,5 @@ class TaskSeeder extends Seeder
             'text_jp' => '偏った食事を行う事を避けることができている',
             'description' => '',
         ]);
-        
-
-
     }
 }

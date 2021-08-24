@@ -19,11 +19,17 @@ class UserSeeder extends Seeder
     {
 
         // Insert role samples 
-        Role::create(['type' => '権限者']);
+        $admin = Role::create(['type' => '権限者']);
         $standard = Role::create(['type' => '一般']);
 
         
         // Insert user samples
+        User::create([
+            'name' => 'Admin',
+            'email' => 'admin@example.com',
+            'password' => bcrypt('12345678'),
+            'role_id' => $admin->id,
+        ]);
         User::create([
             'name' => 'Satoshi',
             'email' => 'satoshi@example.com',
