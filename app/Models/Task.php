@@ -22,7 +22,7 @@ class Task extends Model
     protected $fillable = [
         'level_id',
         'category_id',
-        'name',
+        'text_jp',
         'description',
     ];
 
