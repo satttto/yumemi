@@ -34,10 +34,11 @@ class RegisterController extends Controller
                 Role::where('type', '一般')->first()->id,
             );
         } catch (QueryException $e) {
-            return response()->error('Registration failed', Status::HTTP_BAD_REQUEST);
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
         Auth::login($user);
         $request->session()->regenerate();
-        return response()->success('Registration succeeded');
+        return response()->success('registration succeeded');
     }
 }

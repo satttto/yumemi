@@ -8,16 +8,19 @@ use Illuminate\Http\Request;
 use \Symfony\Component\HttpFoundation\Response as Status; // see details see https://gist.github.com/jeffochoa/a162fc4381d69a2d862dafa61cda0798
 use Illuminate\Database\QueryException;
 use App\Services\VoteService;
+use App\Services\RoleService;
 use Illuminate\Support\Facades\Auth;
 
 
 class VoteController extends Controller
 {
     private $voteService;
+    private $roleService;
 
-    public function __construct(VoteService $voteService)
+    public function __construct(VoteService $voteService, RoleService $roleService)
     {
         $this->voteService = $voteService;
+        $this->roleService = $roleService;
     }
 
     /**
@@ -28,11 +31,12 @@ class VoteController extends Controller
         $userId = Auth::id();
      
         try {
-            return response()->success('succeeded to check if votable', [
+            return response()->success('success', [
                 'is_votable' => $this->voteService->isVotable($userId),
             ]);
         } catch(QueryException $e) {
-            return response()->error('failed to check if votable', Status::HTTP_BAD_REQUEST);
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -47,18 +51,20 @@ class VoteController extends Controller
         // ユーザーが投票可能かどうかの判定
         try {
             if (!$this->voteService->isVotable($userId)) {
-                return response()->error('Not Votable', Status::HTTP_BAD_REQUEST);
+                return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
             }
         } catch (QueryException $e) {
-            return response()->error('Bad query', Status::HTTP_BAD_REQUEST);
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // 投票
         try {
             $this->voteService->vote($userId, $request->answer);
-            return response()->success('succeeded to vote');
+            return response()->success('success');
         } catch(QueryException $e) {
-            return response()->error('failed to create', Status::HTTP_CONFLICT);
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -67,8 +73,23 @@ class VoteController extends Controller
      */
     public function getWinner(Request $request)
     {
-        [$winner, $answer] = $this->voteService->getWinner();
-        return $winner ? response()->success('success', ['user' =>  $winner, 'answer' => $answer]) :
-                               response()->error('failed to fetch');
+        // 管理者であるかどうか確認する(Noの場合はエラー)
+        try {
+            if (!$this->roleService->isAdmin(Auth::user()->role_id)) {
+                return response()->error('No permission', Status::HTTP_BAD_REQUEST);
+            }
+        } catch(QueryException $e) {
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    
+        // 優勝者の取得
+        try {
+            [$winner, $answer] = $this->voteService->getWinner();
+            return response()->success('success', ['user' =>  $winner, 'answer' => $answer]);
+        } catch(QueryException $e) {
+            \Log::debug($e->getMessage());
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
+        };
     }
 }
