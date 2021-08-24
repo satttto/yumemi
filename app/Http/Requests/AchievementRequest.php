@@ -46,7 +46,7 @@ class AchievementRequest extends FormRequest
                             return $fail('Task ids invalid');
                         }
                     } catch(QueryException $e) {
-                        $res = response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+                        $res = response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
                         throw new HttpResponseException($res);
                     }
                 }

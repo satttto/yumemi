@@ -34,7 +34,7 @@ class RegisterController extends Controller
                 Role::where('type', '一般')->first()->id,
             );
         } catch (QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
         Auth::login($user);
         $request->session()->regenerate();

@@ -38,7 +38,7 @@ class AchievementController extends Controller
                 'is_editable' => $this->voteService->isEditable($userId),
             ]);
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -55,7 +55,7 @@ class AchievementController extends Controller
                 return response()->error('Not editable', Status::HTTP_BAD_REQUEST);
             }
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // ユーザーのタスクの更新
@@ -66,7 +66,7 @@ class AchievementController extends Controller
             return response()->success('success');
         } catch(QueryException $e) {
             DB::rollback();
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

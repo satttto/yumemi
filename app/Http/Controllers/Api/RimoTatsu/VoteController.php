@@ -35,7 +35,7 @@ class VoteController extends Controller
                 'is_votable' => $this->voteService->isVotable($userId),
             ]);
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -53,7 +53,7 @@ class VoteController extends Controller
                 return response()->error('Not votable', Status::HTTP_BAD_REQUEST);
             }
         } catch (QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         // 投票
@@ -61,7 +61,7 @@ class VoteController extends Controller
             $this->voteService->vote($userId, $request->answer);
             return response()->success('success');
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -76,7 +76,7 @@ class VoteController extends Controller
                 return response()->error('No permission', Status::HTTP_BAD_REQUEST);
             }
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     
         // 優勝者の取得
@@ -84,7 +84,7 @@ class VoteController extends Controller
             [$winner, $answer] = $this->voteService->getWinner();
             return response()->success('success', ['user' =>  $winner, 'answer' => $answer]);
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         };
     }
 }

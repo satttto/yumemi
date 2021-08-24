@@ -27,7 +27,7 @@ class TaskController extends Controller
                 "tasks" => $this->taskService->getAll(),
             ]);
         } catch(QueryException $e) {
-            return response()->error('DB error', Status::HTTP_INTERNAL_SERVER_ERROR);
+            return response()->error('Internal server error', Status::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 
