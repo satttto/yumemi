@@ -32,6 +32,8 @@ jobs:
       run: |
         sudo systemctl start mysql.service
         mysql -uroot -h127.0.0.1 -proot -e 'CREATE DATABASE IF NOT EXISTS test;'
+    - name: Migration and Seeding
+      run: php artisan migrate:fresh --seed
     - name: Execute tests (Unit and Feature tests) via PHPUnit
       # phpunit.xml で DB_CONNECTION を testing を使用しているので合わせる
       env:
