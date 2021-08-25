@@ -2,9 +2,9 @@
 
 namespace Tests\Feature\Api\Auth;
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class LoginTest extends TestCase
 {
@@ -15,8 +15,33 @@ class LoginTest extends TestCase
      */
     public function testExample()
     {
-        $this->assertTrue(true);
-        //$response = $this->get('/');
-        //$response->assertStatus(200);
+
+        // テストログイン用のユーザー作成
+        $email = 'testadmin@example.com';
+        $password = '12345678';
+        User::where('email', $email)->delete();
+        User::create([
+            'name' => 'TestAdmin',
+            'email' => $email,
+            'password' => bcrypt($password),
+            'role_id' => 1,
+        ]);
+
+        // ログインしていないことを確認
+        $this->assertFalse(Auth::check(), 'unexpected: User already logged-in');
+
+        // ログインリクエスト
+        $response = $this->withHeaders([
+            'Accept' => 'application/json',
+            'Referer' => env('APP_URL'),
+        ])->json('POST', 'api/login', [
+            'email' => $email,
+            'password' => $password,
+        ]);
+
+        // ログインしているか確認
+        $this->assertTrue(Auth::check(), 'Login failed');
+        $response->assertStatus(200);
+
     }
 }
