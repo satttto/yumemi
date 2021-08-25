@@ -3,14 +3,14 @@ name: Laravel
 on:
   push:
     branches:
-	- master
-	- feature/**
-	- fix/**
+      - master
+      - feature/**
+      - fix/**
   pull_request:
     branches:
-	- master
-	- feature/**
-	- fix/**
+      - master
+      - feature/**
+      - fix/**
 
 jobs:
   laravel-tests:
