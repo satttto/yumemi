@@ -2,9 +2,15 @@ name: Laravel
 
 on:
   push:
-    branches: [ master ]
+    branches:
+	- master
+	- feature/**
+	- fix/**
   pull_request:
-    branches: [ master ]
+    branches:
+	- master
+	- feature/**
+	- fix/**
 
 jobs:
   laravel-tests:
