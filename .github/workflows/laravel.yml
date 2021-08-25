@@ -20,7 +20,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Copy .env
-      run: copy('.env.test', '.env')
+      run: cp .env.test .env
     - name: Install Dependencies
       run: composer install 
     - name: Generate key
