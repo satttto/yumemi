@@ -14,8 +14,17 @@ class TaskService
     public function getAll()
     {
         $tasks = Task::with(['level', 'category.parentCategory'])
-                    ->orderBy('id')
+                    ->orderBy('sort_number')
                     ->get();
+        $tasks = $this->dropColumns($tasks);
+        return $tasks;
+    }
+
+    /**
+     * level_id, category_id, category.parent_category_idの列を削除
+     */
+    private function dropColumns($tasks)
+    {
         $tasks->makeHidden(['level_id', 'category_id']);
         foreach($tasks as $task) {
             $task->category->makeHidden('parent_category_id');
