@@ -23,7 +23,6 @@ class ApiResponseServiceProvider extends ServiceProvider
         // data format: 1.{"records": [{...}, {...}]} or 2. {"record": {...}}
         Response::macro('success', function ($message = '', $data = '', $code = Status::HTTP_OK) {
             return response()->json([
-                'status'  => $code,
                 'message' => $message,
                 'data' => $data,
             ], $code);
@@ -32,7 +31,6 @@ class ApiResponseServiceProvider extends ServiceProvider
         // error, return 400
         Response::macro('error', function ($message = '', $code = Status::HTTP_BAD_REQUEST) {
             return response()->json([
-                'status'  => $code,
                 'message'   => $message,
             ], $code);
         });
