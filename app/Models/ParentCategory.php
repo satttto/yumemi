@@ -20,6 +20,7 @@ class ParentCategory extends Model
      */
     protected $fillable = [
         'text_jp',
+        'sort_number',
     ];
 
     public function categories()

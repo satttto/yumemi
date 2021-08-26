@@ -22,6 +22,7 @@ class Category extends Model
     protected $fillable = [
         'text_jp',
         'parent_category_id',
+        'sort_number',
     ];
 
     public function parentCategory()

@@ -24,6 +24,7 @@ class Task extends Model
         'category_id',
         'text_jp',
         'description',
+        'sort_number',
     ];
 
     public function level()
