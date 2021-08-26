@@ -66,11 +66,11 @@ class VoteService
                         ->first();
         
         if ($uniqueAnswer === null) {
-            return [null, null];
+            return ['', ''];
         }
 
         // ユニークで最小の回答をしたユーザーを取得
-        $winner = Vote::where('answer', $uniqueAnswer->answer)->first()->user;
-        return [$winner->name, $uniqueAnswer->answer];
+        $winner = Vote::where('answer', $uniqueAnswer->answer)->first()->user->only(['id', 'name', 'email']);
+        return [$winner, $uniqueAnswer->answer];
     }
 }
