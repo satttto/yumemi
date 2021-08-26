@@ -13,9 +13,14 @@ class TaskService
      */
     public function getAll()
     {
-        return Task::with(['category.parentCategory', 'level'])
+        $tasks = Task::with(['level', 'category.parentCategory'])
                     ->orderBy('id')
                     ->get();
+        $tasks->makeHidden(['level_id', 'category_id']);
+        foreach($tasks as $task) {
+            $task->category->makeHidden('parent_category_id');
+        };
+        return $tasks;
     }
 
     /**
