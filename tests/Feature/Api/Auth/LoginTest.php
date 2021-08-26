@@ -19,6 +19,7 @@ class LoginTest extends TestCase
         // テストログイン用のユーザー作成
         $email = 'testadmin@example.com';
         $password = '12345678';
+        
         User::where('email', $email)->delete();
         User::create([
             'name' => 'TestAdmin',
@@ -42,6 +43,8 @@ class LoginTest extends TestCase
         // ログインしているか確認
         $this->assertTrue(Auth::check(), 'Login failed');
         $response->assertStatus(200);
+
+        User::where('email', $email)->delete();
 
     }
 }
