@@ -51,7 +51,7 @@ jobs:
 
     env:
       AWS_REGION: ap-northeast-1
-      ECS_TASK_DEFINITION: intern-202108-s_sugai-taskdef
+      ECS_TASK_DEFINITION: intern-202108-s_sugai-taskdef:2
       CONTAINER_NAME: Laravel
       ECS_SERVICE: intern-202108-cluster
       ECS_CLUSTER: intern-202108-s_sugai-service
