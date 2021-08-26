@@ -87,7 +87,7 @@ jobs:
           docker tag intern-202108/s_sugai-ecr:latest 280107060642.dkr.ecr.ap-northeast-1.amazonaws.com/intern-202108/s_sugai-ecr:v0.1
           docker push 280107060642.dkr.ecr.ap-northeast-1.amazonaws.com/intern-202108/s_sugai-ecr:v0.1
 
-       - name: List files
+      - name: List files
         run: ls -R
 
       - name: Fill in the new image ID in the Amazon ECS task definition
