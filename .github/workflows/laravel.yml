@@ -80,9 +80,12 @@ jobs:
           # Docker コンテナを作成し
           # ECR にプッシュして
           # ECS にデプロイできるようにする。
-          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
-          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-          echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          #docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          #docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          #echo "::set-output name=image::$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker build -f for_aws/Dockerfile . -t intern-202108/s_sugai-ecr
+          docker tag intern-202108/s_sugai-ecr:latest 280107060642.dkr.ecr.ap-northeast-1.amazonaws.com/intern-202108/s_sugai-ecr:v0.1
+          docker push 280107060642.dkr.ecr.ap-northeast-1.amazonaws.com/intern-202108/s_sugai-ecr:v0.1
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
