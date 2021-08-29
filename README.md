@@ -25,5 +25,5 @@ I developed a API with laravel in the 2-week internship.
 ## Test
 - Postman was used to manually check the behavior of the api
 - phpmyadmin was used to manually modify the database
-- Github actions was used to auto-test the code
+- Github actions was used to auto-test the code (CI)
 
