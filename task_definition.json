@@ -1,0 +1,207 @@
+{
+  "ipcMode": null,
+  "executionRoleArn": "arn:aws:iam::280107060642:role/intern-202108-ecs-task-exec",
+  "containerDefinitions": [
+    {
+      "dnsSearchDomains": null,
+      "environmentFiles": null,
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "secretOptions": null,
+        "options": {
+          "awslogs-group": "/ecs/intern-202108-s_sugai-taskdef",
+          "awslogs-region": "ap-northeast-1",
+          "awslogs-stream-prefix": "ecs"
+        }
+      },
+      "entryPoint": null,
+      "portMappings": [
+        {
+          "hostPort": 80,
+          "protocol": "tcp",
+          "containerPort": 80
+        }
+      ],
+      "command": null,
+      "linuxParameters": null,
+      "cpu": 512,
+      "environment": [
+        {
+          "name": "APP_DEBUG",
+          "value": "FALSE"
+        },
+        {
+          "name": "APP_ENV",
+          "value": "dev"
+        },
+        {
+          "name": "APP_KEY",
+          "value": "base64:cSlyv4UAU0GJzoz0PN65ySI7NV0kztT11pxfh0xnRnk="
+        },
+        {
+          "name": "APP_URL",
+          "value": "https://intern-202108-s_sugai.sandbox.yumemi.io"
+        },
+        {
+          "name": "DB_DATABASE",
+          "value": "s_sugai_db"
+        },
+        {
+          "name": "DB_HOST",
+          "value": "intern-202108-db.cluster-ch3v0aklu64f.ap-northeast-1.rds.amazonaws.com"
+        },
+        {
+          "name": "DB_USERNAME",
+          "value": "s_sugai"
+        },
+        {
+          "name": "LOG_CHANNEL",
+          "value": "stderr"
+        },
+        {
+          "name": "REDIS_HOST",
+          "value": "intern-202108-redis.tubqsd.ng.0001.apne1.cache.amazonaws.com"
+        },
+        {
+          "name": "SESSION_DRIVER",
+          "value": "redis"
+        },
+        {
+          "name": "SESSION_LIFETIME",
+          "value": "120"
+        }
+      ],
+      "resourceRequirements": null,
+      "ulimits": null,
+      "dnsServers": null,
+      "mountPoints": [],
+      "workingDirectory": null,
+      "secrets": [
+        {
+          "name": "DB_PASSWORD",
+          "valueFrom": "arn:aws:ssm:ap-northeast-1:280107060642:parameter/intern202108/s_sugai/DB_PASSWORD" 
+        }
+      ],
+      "dockerSecurityOptions": null,
+      "memory": null,
+      "memoryReservation": 1024,
+      "volumesFrom": [],
+      "stopTimeout": null,
+      "image": "280107060642.dkr.ecr.ap-northeast-1.amazonaws.com/intern-202108/s_sugai-ecr:v0.1",
+      "startTimeout": null,
+      "firelensConfiguration": null,
+      "dependsOn": null,
+      "disableNetworking": null,
+      "interactive": null,
+      "healthCheck": {
+        "retries": 5,
+        "command": [
+          "CMD-SHELL",
+          "curl -f http://localhost/ || exit 1"
+        ],
+        "timeout": 60,
+        "interval": 30,
+        "startPeriod": 3
+      },
+      "essential": true,
+      "links": null,
+      "hostname": null,
+      "extraHosts": null,
+      "pseudoTerminal": null,
+      "user": null,
+      "readonlyRootFilesystem": null,
+      "dockerLabels": null,
+      "systemControls": null,
+      "privileged": null,
+      "name": "Laravel"
+    }
+  ],
+  "placementConstraints": [],
+  "memory": "1024",
+  "taskRoleArn": "arn:aws:iam::280107060642:role/intern-202108-ecs-task",
+  "compatibilities": [
+    "EC2",
+    "FARGATE"
+  ],
+  "taskDefinitionArn": "arn:aws:ecs:ap-northeast-1:280107060642:task-definition/intern-202108-s_sugai-taskdef:2",
+  "family": "intern-202108-s_sugai-taskdef",
+  "requiresAttributes": [
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.logging-driver.awslogs"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-awslogs"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.ecr-auth"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.19"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.21"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.task-iam-role"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.container-health-check"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.execution-role-ecr-pull"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.18"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "ecs.capability.task-eni"
+    },
+    {
+      "targetId": null,
+      "targetType": null,
+      "value": null,
+      "name": "com.amazonaws.ecs.capability.docker-remote-api.1.29"
+    }
+  ],
+  "pidMode": null,
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "networkMode": "awsvpc",
+  "cpu": "512",
+  "revision": 2,
+  "status": "ACTIVE",
+  "inferenceAccelerators": null,
+  "proxyConfiguration": null,
+  "volumes": []
+}
